@@ -112,9 +112,9 @@ public abstract class AbstractFastMetablocking extends AbstractFastEfficiencyMet
             if (entityId < datasetLimit) {
                 return new Comparison(cleanCleanER, entityId, neighborId-datasetLimit);
             } else {
-            	Comparison c=new Comparison(cleanCleanER, neighborId, entityId-datasetLimit);
-            	c.flag=1;
-                return c;
+            	return new Comparison(cleanCleanER, neighborId, entityId-datasetLimit);
+            	
+                
             }
         }
     }

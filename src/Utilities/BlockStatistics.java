@@ -218,11 +218,12 @@ public class BlockStatistics implements Constants {
 
     private void getDuplicatesOfDecomposedBlocks(double totalComparisons) {
         System.out.println("\n\nGetting duplicates...");
-
+        int blockSize=0;
         for (AbstractBlock block : blocks) {
             ComparisonIterator iterator = block.getComparisonIterator();
             while (iterator.hasNext()) {
                 abstractDP.isSuperfluous(iterator.next());
+                blockSize++;
             }
         }
 
@@ -232,6 +233,7 @@ public class BlockStatistics implements Constants {
         System.out.println("Detected duplicates\t:\t" + abstractDP.getNoOfDuplicates());
         System.out.println("PC\t:\t" + pc);
         System.out.println("PQ\t:\t" + pq);
+        System.out.println("Blocksize "+ blockSize);
     }
 
     private void getDuplicatesWithEntityIndex(double totalComparisons) {

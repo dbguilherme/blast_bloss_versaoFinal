@@ -207,14 +207,18 @@ public class RedefinedCardinalityNodePruning extends MetaBlocking.FastImplementa
         	// if(entityId==2516)
         	//	 System.out.println("2516 ---");
             double weight = getWeight(entityId, neighborId);
+            int blockId=it.next();
+            
+            if(neighborId==6792)
+        		System.out.println("ok");
             if (weight < minimumWeight) {
                 continue;
             }
-
+          
             Comparison comparison = getComparison(entityId, neighborId);
            
             comparison.setUtilityMeasure(weight);
-            comparison.blockId=it.next();
+            comparison.blockId=blockId;
             topKEdges.add(comparison);
             if (threshold < topKEdges.size()) {
                 Comparison lastComparison = topKEdges.poll();
@@ -229,21 +233,30 @@ public class RedefinedCardinalityNodePruning extends MetaBlocking.FastImplementa
         	int neighborId_clean;
         	int neighborId = c.getEntityId1() == entityId ? c.getEntityId2() : c.getEntityId1();
         	neighborId_clean=neighborId;
+        	if(neighborId_clean==6792 || neighborId==6792)
+        		System.out.println("ok");
             if (cleanCleanER && entityId < datasetLimit) {
                 neighborId += datasetLimit;
             }
-
-            if (nearestEntities[neighborId] == null) {
-                continue;
-            }
-
-            if (nearestEntities[neighborId].contains(c)) {
-                if(! (entityId < neighborId))
-                	continue;
-            }
+//
+//            if (nearestEntities[neighborId] == null) {
+//                continue;
+//            }
+//
+//            if (nearestEntities[neighborId].contains(c)) {
+//                if(! (entityId < neighborId))
+//                	continue;
+//            }
            
            // System.out.println(entityId +" "+ neighborId);
-        	Comparison comp = new Comparison(true, entityId, neighborId);
+//            if(entityId>datasetLimit){
+//        		int temp=neighborId_clean;
+//        		neighborId=entityId;
+//        		entityId=temp;
+//        	}
+            Comparison comp = new Comparison(true, entityId, neighborId_clean);
+        	
+        	
         	final List<Integer> commonBlockIndices = entityIndex.getCommonBlockIndices(c.blockId, comp);
 			if(commonBlockIndices==null)
 				continue;
@@ -252,7 +265,7 @@ public class RedefinedCardinalityNodePruning extends MetaBlocking.FastImplementa
 
 
 			double ibf1 = Math.log(noOfBlocks/entityIndex.getNoOfEntityBlocks(entityId, 0));
-			double ibf2 = Math.log(noOfBlocks/entityIndex.getNoOfEntityBlocks(neighborId_clean, 1));
+			double ibf2 = Math.log(noOfBlocks/entityIndex.getNoOfEntityBlocks(neighborId, 0));
 
 			instanceValues[0] = commonBlockIndices.size()*ibf1*ibf2;
 
@@ -269,8 +282,8 @@ public class RedefinedCardinalityNodePruning extends MetaBlocking.FastImplementa
 			instanceValues[4] = nonRedundantCPE[neighborId];
 			//   	instanceValues[5] =	ebc.getSimilarityAttribute(c.getEntityId1(), c.getEntityId2());
 			
-			instanceValues[5]= getWeight(entityId,neighborId);
-			instanceValues[6]=c.getUtilityMeasure(); 
+			instanceValues[5]= neighborId;
+			instanceValues[6]=entityId;//c.getUtilityMeasure(); 
 					//(Math.sqrt(Math.pow(averageWeight[entityId], 2) + Math.pow(averageWeight[neighborId], 2)) / 4) *  getWeight(c.getEntityId1(), c.getEntityId2()+datasetLimit);
 
 			instanceValues[7] = adp.isSuperfluous(c)==true?0:1;//adp.isSuperfluous(getComparison(c.getEntityId1(), c.getEntityId2()+datasetLimit))?1:0;
@@ -282,9 +295,10 @@ public class RedefinedCardinalityNodePruning extends MetaBlocking.FastImplementa
 //				System.out.print(instanceValues[i] +" ");
 //			}
 //        	System.out.println();
-			if(instanceValues[6]!=instanceValues[5])
-				System.out.println("erro");
-			
+//			if(instanceValues[6]!=instanceValues[5])
+//				System.out.println("erro");
+//			else
+//				System.out.print("...");
         }
         
     }

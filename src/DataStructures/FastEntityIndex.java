@@ -299,9 +299,9 @@ public class FastEntityIndex implements Serializable {
                 if (blocks1[i] == blocks2[j]) {
                     if (!firstCommonIndex) {
                         firstCommonIndex = true;
-                        if (blocks1[i] != blockIndex) {
-                            return null;
-                        }
+//                        if (blocks1[i] != blockIndex) {
+//                            return null;
+//                        }
                     }
                     indices.add(blocks1[i]);
                 }
